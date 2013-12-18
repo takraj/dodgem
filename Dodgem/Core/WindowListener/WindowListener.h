@@ -1,7 +1,6 @@
 #pragma once
 
-#include <OGRE\OgreFrameListener.h>
-#include <OGRE\OgreRenderWindow.h>
+#include "..\..\stdafx.h"
 
 namespace Dodgem
 {

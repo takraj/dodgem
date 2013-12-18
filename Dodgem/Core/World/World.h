@@ -1,17 +1,12 @@
 #pragma once
 
-#include <OGRE\OgreRenderWindow.h>
-#include <OGRE\OgreSceneManager.h>
-#include <OGRE\OgreLight.h>
-#include <OGRE\OgreMath.h>
-#include <OGRE\OgreColourValue.h>
-#include <OGRE\OgreEntity.h>
-
 #include "Camera\Camera.h"
 #include "Arena\Arena.h"
 #include "ArenaFragment\ArenaFragment.h"
 #include "Meteor\Meteor.h"
+#include "TestBall\TestBall.h"
 #include "..\InputHandler\InputHandler.h"
+#include "..\PhysicsHandler\PhysicsHandler.h"
 
 namespace Dodgem
 {
@@ -22,7 +17,9 @@ namespace Dodgem
 		Dodgem::Arena* arena;
 		Dodgem::Camera* camera;
 		Dodgem::Meteor* meteor;
+		Dodgem::TestBall* testBall;
 		Dodgem::InputHandler* ih;
+		Dodgem::PhysicsHandler* physics;
 
 		Ogre::Light* light;
 
@@ -33,6 +30,7 @@ namespace Dodgem
 		~World(void);
 
 		bool StepSimulation(Ogre::Real dt);
+		OgreDebugDrawer* GetDebugger();
 	};
 
 }

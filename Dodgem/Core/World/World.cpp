@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "World.h"
 
 using namespace Dodgem;
@@ -7,6 +8,8 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	this->sm = sceneManager;
 	this->window = renderWindow;
 	this->ih = inputHandler;
+
+	this->physics = new Dodgem::PhysicsHandler();
 
 	sceneManager->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f, 1.0f));
 	sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
@@ -19,26 +22,40 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	light->setCastShadows(true);
 	light->setDirection(-1, -1, -1);
 
-	this->camera = new Camera(sm, window);
-	this->arena = new Arena(sm, 30, 15);
-	this->meteor = new Meteor(sm, this->arena);
+	this->camera = new Camera(this->sm, this->window);
+	this->arena = new Arena(this->sm, this->physics, 30, 15);
+	this->meteor = new Meteor(this->sm, this->arena);
+	this->testBall = new TestBall(this->sm, this->physics);
 }
 
 
 World::~World(void)
 {
-	delete arena;
-	delete camera;
+	delete this->arena;
+	delete this->camera;
+	delete this->meteor;
+	delete this->testBall;
+	delete this->physics;
+}
+
+OgreDebugDrawer* World::GetDebugger()
+{
+	return this->physics->Debug(this->sm);
 }
 
 bool World::StepSimulation(Ogre::Real dt)
 {
-	ih->CaptureState();
+	ih->CaptureState(dt);
 
-	ih->ControlMeteor(this->meteor, dt);
+	ih->ControlMeteor(this->meteor);
 	this->meteor->StepAnimation(dt);
 
-	if (!ih->ControlCamera(this->camera, dt))
+	this->physics->StepSimulation(dt);
+
+	ih->ControlTestBall(this->camera, this->testBall);
+	this->testBall->Update();
+
+	if (!ih->ControlCamera(this->camera))
 	{
 		return false;
 	}

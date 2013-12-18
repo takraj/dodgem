@@ -1,9 +1,6 @@
 #pragma once
 
-#include <OGRE\OgreCamera.h>
-#include <OGRE\OgreSceneManager.h>
-#include <OGRE\OgreRenderWindow.h>
-#include <OGRE\OgreMath.h>
+#include "..\..\..\stdafx.h"
 
 namespace Dodgem
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
-#include <OGRE\OgreVector3.h>
+#include "..\..\..\stdafx.h"
+#include "..\..\PhysicsHandler\PhysicsHandler.h"
 
 namespace Dodgem
 {
@@ -18,6 +18,7 @@ namespace Dodgem
 	{
 	private:
 		size_t _col, _row;
+		bool isChanged;
 
 		ArenaTriangle tri_upper_left_1;
 		ArenaTriangle tri_upper_left_2;
@@ -30,8 +31,21 @@ namespace Dodgem
 
 		ArenaTriangle tri_lower_right_1;
 		ArenaTriangle tri_lower_right_2;
+
+		Dodgem::PhysicsHandler* physics;
+		btMotionState* fragmentMotionState;
+		btRigidBody* fragmentRigidBody;
+		btTriangleMesh* fragmentTriangleMesh;
+		btTriangleMeshShape* fragmentShape;
 	public:
-		ArenaFragment(size_t col, size_t row);
+		ArenaFragment(Dodgem::PhysicsHandler* physicsHandler, size_t col, size_t row);
+
+		bool IsChanged();
+		void SetChanged(bool value);
+		void UpdatePhysics();
+
+		size_t GetColumn();
+		size_t GetRow();
 
 		std::vector<ArenaTriangle*> GetTriangleReferences();
 		std::vector<ArenaTriangle> GetAvailableTriangles();

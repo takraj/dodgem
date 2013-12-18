@@ -1,11 +1,6 @@
 #pragma once
 
-#include <random>
-
-#include <OGRE\OgreSceneManager.h>
-#include <OGRE\OgreEntity.h>
-#include <Ogre\OgreMath.h>
-
+#include "..\..\..\stdafx.h"
 #include "..\Arena\Arena.h"
 
 namespace Dodgem

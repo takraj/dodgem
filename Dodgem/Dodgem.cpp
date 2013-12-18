@@ -1,14 +1,7 @@
 // Dodgem.cpp : Defines the entry point for the console application.
 //
 
-#include <stdio.h>
-#include <tchar.h>
-
-#include <OGRE\OgreRenderWindow.h>
-#include <OGRE\OgreFrameListener.h>
-#include <OGRE\OgreRoot.h>
-#include <OGRE\OgreSceneManager.h>
-
+#include "stdafx.h"
 #include "Core\WindowListener\WindowListener.h"
 #include "Core\GameplayListener\GameplayListener.h"
 #include "Core\InputHandler\InputHandler.h"
@@ -27,9 +20,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	auto inputHandler = new Dodgem::InputHandler(window);
 	auto world = new Dodgem::World(window, sceneManager, inputHandler);
 	
+	ogreRoot.addFrameListener(world->GetDebugger());
 	ogreRoot.addFrameListener(new Dodgem::WindowListener(window));
 	ogreRoot.addFrameListener(new Dodgem::GameplayListener(world));
 	ogreRoot.startRendering();
+
+	delete world;
+	delete inputHandler;
 
 	return 0;
 }

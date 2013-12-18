@@ -1,12 +1,7 @@
 #pragma once
 
-#include <OGRE\OgreSceneNode.h>
-#include <OGRE\OgreSceneManager.h>
-#include <OGRE\OgreManualObject.h>
-#include <OGRE\OgreRenderOperation.h>
-#include <OGRE\OgreMath.h>
-
 #include "..\ArenaFragment\ArenaFragment.h"
+#include "..\..\PhysicsHandler\PhysicsHandler.h"
 
 namespace Dodgem
 {
@@ -18,14 +13,22 @@ namespace Dodgem
 		Ogre::SceneNode* root;
 		Ogre::SceneManager* sm;
 
+		Dodgem::PhysicsHandler* physics;
+		btMotionState* arenaMotionState;
+		btRigidBody* arenaRigidBody;
+		btTriangleMesh* arenaTriangleMesh;
+		btTriangleMeshShape* arenaShape;
+
 		std::vector<Dodgem::ArenaFragment> fragments;
 
 		size_t width, height;
 
 		void CreateArena();
+		void CreateArenaPhysics();
 		void UpdateArena();
+		void UpdateArenaPhysics();
 	public:
-		Arena(Ogre::SceneManager* sceneManager, size_t arena_w, size_t arena_h);
+		Arena(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHandler, size_t arena_w, size_t arena_h);
 		~Arena(void);
 
 		Ogre::Vector3 GetBounds();

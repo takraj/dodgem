@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "WindowListener.h"
 
 using namespace Dodgem;

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "GameplayListener.h"
 
 using namespace Dodgem;

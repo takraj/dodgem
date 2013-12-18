@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Meteor.h"
 
 using namespace Dodgem;

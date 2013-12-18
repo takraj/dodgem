@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "InputHandler.h"
 
 using namespace Dodgem;
@@ -27,17 +28,24 @@ InputHandler::~InputHandler(void)
 	OIS::InputManager::destroyInputSystem(OISInputManager);
 }
 
-void InputHandler::CaptureState()
+void InputHandler::CaptureState(Ogre::Real dt)
 {
 	mKeyboard->capture();
 	mMouse->capture();
+
+	if (mTimeUntilNextToggle >= 0)
+	{
+		mTimeUntilNextToggle -= dt;
+	}
+
+	this->mDelta = dt;
 }
 
-bool InputHandler::ControlCamera(Camera* camera, Ogre::Real dt)
+bool InputHandler::ControlCamera(Camera* camera)
 {
 	const float mousesensitivity = 1.0f;
-	const float cameraMoveSpeed = 1000.0f * dt;
-	const float cameraRotateSpeed = 50.0f * dt;
+	const float cameraMoveSpeed = 1000.0f * this->mDelta;
+	const float cameraRotateSpeed = 50.0f * this->mDelta;
 
 	auto campos = camera->GetPosition();
 	auto camdir = camera->GetDirection();
@@ -47,27 +55,8 @@ bool InputHandler::ControlCamera(Camera* camera, Ogre::Real dt)
 
 	auto& ms = mMouse->getMouseState();
 
-	if (ms.buttonDown(OIS::MB_Right))
-	{
-		cammove += camright * ((float)ms.X.rel) * 0.01f;
-		cammove += camup * ((float)ms.Y.rel) * 0.01f;
-	}
-	else
-	{
-		camera->Yaw(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.X.rel * 0.01f));
-		camera->Pitch(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.Y.rel * 0.01f));
-	}
-
-	if (ms.buttonDown(OIS::MB_Left) && mTimeUntilNextToggle < 0)
-	{
-		mTimeUntilNextToggle = 0.5f;
-		Ogre::LogManager::getSingletonPtr()->logMessage("left button down");
-	}
-
-	if (mTimeUntilNextToggle >= 0)
-	{
-		mTimeUntilNextToggle -= dt;
-	}
+	camera->Yaw(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.X.rel * 0.01f));
+	camera->Pitch(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.Y.rel * 0.01f));
 
 	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE) && mTimeUntilNextToggle < 0)
 	{
@@ -134,11 +123,22 @@ bool InputHandler::ControlCamera(Camera* camera, Ogre::Real dt)
 	return true;
 }
 
-void InputHandler::ControlMeteor(Meteor* meteor, Ogre::Real dt)
+void InputHandler::ControlMeteor(Meteor* meteor)
 {
 	if (mKeyboard->isKeyDown(OIS::KC_SPACE) && mTimeUntilNextToggle < 0)
 	{
 		meteor->Create();
+		mTimeUntilNextToggle = 0.5f;
+	}
+}
+
+void InputHandler::ControlTestBall(Camera* camera, TestBall* testBall)
+{
+	auto& ms = mMouse->getMouseState();
+
+	if (ms.buttonDown(OIS::MB_Left) && mTimeUntilNextToggle < 0)
+	{
+		testBall->Create(camera->GetPosition(), camera->GetDirection());
 		mTimeUntilNextToggle = 0.5f;
 	}
 }
