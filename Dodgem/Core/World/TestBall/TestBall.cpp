@@ -28,6 +28,20 @@ TestBall::TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* phy
 
 TestBall::~TestBall(void)
 {
+	// ??
+}
+
+void TestBall::Kill()
+{
+	if (!this->created) return;
+
+	this->physics->RemoveRigidBody(this->ballRigidBody);
+	delete this->ballRigidBody;
+	delete this->ballMotionState;
+
+	this->created = false;
+	this->node->setVisible(false);
+	this->node->setPosition(0, 0, 0);
 }
 
 
@@ -44,6 +58,7 @@ void TestBall::Create(Ogre::Vector3 position, Ogre::Vector3 direction)
 	this->ballRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(this->mass, this->ballMotionState, this->ballShape, this->inertia));
 	this->ballRigidBody->setDamping(0.2, 0);
 	this->ballRigidBody->setRestitution(1.6);
+	this->ballRigidBody->setFriction(1000);
 	this->ballRigidBody->applyGravity(),
 	this->ballRigidBody->applyCentralImpulse(physics->AsBulletVector(direction * Ogre::Real(1000)));
 
@@ -64,4 +79,17 @@ void TestBall::Update()
 
 	this->node->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
 	this->node->setPosition(pos.x(), pos.y(), pos.z());
+}
+
+Ogre::Vector3 TestBall::GetPosition()
+{
+	return this->node->getPosition();
+}
+
+void TestBall::ApplyForce(Ogre::Vector3 f)
+{
+	if ((!this->created) || (this->node->getPosition().y <= 0)) return;
+
+	this->ballRigidBody->activate(true);
+	this->ballRigidBody->applyTorque(this->physics->AsBulletVector(f));
 }

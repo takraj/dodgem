@@ -65,12 +65,12 @@ bool InputHandler::ControlCamera(Camera* camera)
 		return false;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_UP) || mKeyboard->isKeyDown(OIS::KC_W))
+	if (mKeyboard->isKeyDown(OIS::KC_W))
 	{
 		cammove += camdir;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_DOWN) || mKeyboard->isKeyDown(OIS::KC_S))
+	if (mKeyboard->isKeyDown(OIS::KC_S))
 	{
 		cammove -= camdir;
 	}
@@ -98,15 +98,7 @@ bool InputHandler::ControlCamera(Camera* camera)
 	cammove.normalise();
 	camera->SetPosition(campos + cammove * cameraMoveSpeed);
 
-	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
-	{
-		camera->Rotate(Ogre::Vector3::UNIT_Y,Ogre::Radian(cameraRotateSpeed * 0.02f));
-	}
-
-	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
-	{
-		camera->Rotate(Ogre::Vector3::UNIT_Y, Ogre::Radian(-cameraRotateSpeed * 0.02f));
-	}
+	
 
 	camright = camera->GetRight();
 
@@ -141,4 +133,38 @@ void InputHandler::ControlTestBall(Camera* camera, TestBall* testBall)
 		testBall->Create(camera->GetPosition(), camera->GetDirection());
 		mTimeUntilNextToggle = 0.5f;
 	}
+
+	auto upForce = camera->GetUp();
+	upForce.y = 0;
+	upForce.normalise();
+	upForce *= 40000;
+
+	auto rightForce = camera->GetRight();
+	rightForce.y = 0;
+	rightForce.normalise();
+	rightForce *= 40000;
+
+	auto forceVector = Ogre::Vector3(0, 0, 0);
+
+	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
+	{
+		forceVector -= upForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
+	{
+		forceVector += upForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_UP))
+	{
+		forceVector -= rightForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
+	{
+		forceVector += rightForce;
+	}
+
+	testBall->ApplyForce(forceVector);
 }

@@ -27,6 +27,9 @@ namespace Dodgem
 
 		void Create(Ogre::Vector3 position, Ogre::Vector3 direction);
 		void Update();
+		void Kill();
+		void ApplyForce(Ogre::Vector3 f);
+		Ogre::Vector3 GetPosition();
 	};
 
 }

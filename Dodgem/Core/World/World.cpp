@@ -53,7 +53,13 @@ bool World::StepSimulation(Ogre::Real dt)
 	this->physics->StepSimulation(dt);
 
 	ih->ControlTestBall(this->camera, this->testBall);
+
 	this->testBall->Update();
+
+	if (this->testBall->GetPosition().y < -5000)
+	{
+		this->testBall->Kill();
+	}
 
 	if (!ih->ControlCamera(this->camera))
 	{

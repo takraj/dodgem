@@ -11,18 +11,14 @@ Arena::Arena(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHa
 
 	width = arena_w;
 	height = arena_h;
-
+	
+	this->arenaRigidBody = NULL;
 	this->CreateArena();
-	//this->CreateArenaPhysics();
 }
 
 
 Arena::~Arena(void)
 {
-	/*delete arenaMotionState;
-	delete arenaRigidBody;
-	delete arenaTriangleMesh;
-	delete arenaShape;*/
 }
 
 
@@ -32,7 +28,7 @@ void Arena::CreateArena()
 	{
 		for (size_t j = 0; j < height; j++)
 		{
-			fragments.push_back(ArenaFragment(this->physics, i, j));
+			fragments.push_back(ArenaFragment(i, j));
 		}
 	}
 
@@ -53,67 +49,57 @@ void Arena::CreateArena()
 
 void Arena::UpdateArena()
 {
+	bool needToCreate = true;
+	bool destroy = true;
+
+	if (this->arenaRigidBody != NULL)
+	{
+		this->physics->RemoveRigidBody(arenaRigidBody);
+		delete arenaTriangleMesh;
+		delete arenaShape;
+		needToCreate = false;
+	}
+
+	this->arenaTriangleMesh = new btTriangleMesh(false, false);
+	size_t do_not_check = this->height;
+
 	for (auto& fragment : fragments)
 	{
-		fragment.UpdatePhysics();
 		auto representingTriangles = fragment.GetRepresentingTriangles();
-		for (auto& tri : representingTriangles)
+		for (auto tri : representingTriangles)
 		{
-			arenaObject->position(tri.v3);
-			arenaObject->position(tri.v2);
-			arenaObject->position(tri.v2);
-			arenaObject->position(tri.v1);
-			arenaObject->position(tri.v1);
-			arenaObject->position(tri.v3);
+			arenaObject->position(tri->v3);
+			arenaObject->position(tri->v2);
+			arenaObject->position(tri->v2);
+			arenaObject->position(tri->v1);
+			arenaObject->position(tri->v1);
+			arenaObject->position(tri->v3);
+
+			auto vertex1 = physics->AsBulletVector(tri->v1);
+			auto vertex2 = physics->AsBulletVector(tri->v2);
+			auto vertex3 = physics->AsBulletVector(tri->v3);
+			arenaTriangleMesh->addTriangle(vertex3, vertex2, vertex1);
+
+			destroy = false;
 		}
 	}
-}
 
-void Arena::CreateArenaPhysics()
-{
-	this->arenaTriangleMesh = new btTriangleMesh();
-	
-	for (auto& fragment : fragments)
+	if (destroy)
 	{
-		auto representingTriangles = fragment.GetRepresentingTriangles();
-		for (auto& tri : representingTriangles)
-		{
-			auto vertex1 = btVector3(tri.v1.x, tri.v1.y, tri.v1.z);
-			auto vertex2 = btVector3(tri.v2.x, tri.v2.y, tri.v2.z);
-			auto vertex3 = btVector3(tri.v3.x, tri.v3.y, tri.v3.z);
-			arenaTriangleMesh->addTriangle(vertex3, vertex2, vertex1);
-		}
+		this->arenaRigidBody = NULL;
+		delete this->arenaTriangleMesh;
+		return;
 	}
 
 	arenaShape = new btBvhTriangleMeshShape(arenaTriangleMesh, true);
-	arenaMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
-	arenaRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(0, arenaMotionState, arenaShape, btVector3(0, 0, 0)));
-	arenaRigidBody->setRestitution(btScalar(0.1));
 
-	physics->AddRigidBody(arenaRigidBody);
-}
-
-void Arena::UpdateArenaPhysics()
-{
-	this->physics->RemoveRigidBody(arenaRigidBody);
-
-	delete arenaTriangleMesh;
-	arenaTriangleMesh = new btTriangleMesh(false, false);
-	
-	for (auto& fragment : fragments)
+	if (needToCreate)
 	{
-		auto representingTriangles = fragment.GetRepresentingTriangles();
-		for (auto& tri : representingTriangles)
-		{
-			auto vertex1 = btVector3(tri.v1.x, tri.v1.y, tri.v1.z);
-			auto vertex2 = btVector3(tri.v2.x, tri.v2.y, tri.v2.z);
-			auto vertex3 = btVector3(tri.v3.x, tri.v3.y, tri.v3.z);
-			arenaTriangleMesh->addTriangle(vertex3, vertex2, vertex1);
-		}
+		arenaMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+		arenaRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(0, arenaMotionState, arenaShape, btVector3(0, 0, 0)));
+		arenaRigidBody->setRestitution(btScalar(0.1));
+		arenaRigidBody->setFriction(1);
 	}
-
-	delete arenaShape;
-	arenaShape = new btBvhTriangleMeshShape(arenaTriangleMesh, true);
 
 	arenaRigidBody->setCollisionShape(arenaShape);
 	physics->AddRigidBody(arenaRigidBody);
@@ -132,25 +118,14 @@ void Arena::Impact(Ogre::Vector3 impactPoint, Ogre::Real impactRadius)
 
 	for (auto& fragment : fragments)
 	{
-		auto tris = fragment.GetTriangleReferences();
-		for (auto& tri : tris)
+		auto tris = fragment.GetAvailableTriangles();
+		for (auto tri : tris)
 		{
-			if (impactPoint2D.squaredDistance(tri->v1) < effect_radius_sqrd)
+			if ((impactPoint2D.squaredDistance(tri->v1) < effect_radius_sqrd)
+				|| (impactPoint2D.squaredDistance(tri->v2) < effect_radius_sqrd)
+				|| (impactPoint2D.squaredDistance(tri->v3) < effect_radius_sqrd))
 			{
 				tri->isDestroyed = true;
-				fragment.SetChanged(true);
-			}
-
-			if (impactPoint2D.squaredDistance(tri->v2) < effect_radius_sqrd)
-			{
-				tri->isDestroyed = true;
-				fragment.SetChanged(true);
-			}
-
-			if (impactPoint2D.squaredDistance(tri->v3) < effect_radius_sqrd)
-			{
-				tri->isDestroyed = true;
-				fragment.SetChanged(true);
 			}
 		}
 	}
@@ -158,6 +133,4 @@ void Arena::Impact(Ogre::Vector3 impactPoint, Ogre::Real impactRadius)
 	arenaObject->beginUpdate(0);
 	this->UpdateArena();
 	arenaObject->end();
-
-	//this->UpdateArenaPhysics();
 }

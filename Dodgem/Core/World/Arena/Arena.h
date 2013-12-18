@@ -24,9 +24,7 @@ namespace Dodgem
 		size_t width, height;
 
 		void CreateArena();
-		void CreateArenaPhysics();
 		void UpdateArena();
-		void UpdateArenaPhysics();
 	public:
 		Arena(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHandler, size_t arena_w, size_t arena_h);
 		~Arena(void);
