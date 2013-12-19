@@ -11,6 +11,7 @@ namespace Dodgem
 	private:
 		bool active;
 		bool impacted;
+		bool effectDispatched;
 
 		Ogre::Real timeElapsedSinceCreation;
 		Ogre::Vector3 birthPoint;
@@ -26,6 +27,9 @@ namespace Dodgem
 		void Create();
 		void StepAnimation(Ogre::Real dt);
 		bool isActive();
+		bool IsEffectDispatched();
+		void SetEffectDispatched(bool state);
+		Ogre::Vector3 GetPosition();
 	};
 
 }

@@ -58,3 +58,11 @@ Ogre::Vector3 Camera::GetUp()
 {
 	return camera->getUp();
 }
+
+void Camera::AnimateToPosition(Ogre::Vector3 pos, Ogre::Real dt)
+{
+	auto currentPos = this->camera->getPosition();
+	auto movement = pos - currentPos;
+
+	this->camera->setPosition(currentPos + (movement * dt));
+}

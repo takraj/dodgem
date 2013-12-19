@@ -25,11 +25,16 @@ namespace Dodgem
 		TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHandler);
 		~TestBall(void);
 
-		void Create(Ogre::Vector3 position, Ogre::Vector3 direction);
+		void Create(Ogre::Vector3 position);
 		void Update();
 		void Kill();
 		void ApplyForce(Ogre::Vector3 f);
+		void ApplyImpulse(Ogre::Vector3 f);
 		Ogre::Vector3 GetPosition();
+
+		bool IsAlive();
+
+		btRigidBody* GetRigidBody();
 	};
 
 }

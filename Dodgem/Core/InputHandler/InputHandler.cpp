@@ -41,6 +41,18 @@ void InputHandler::CaptureState(Ogre::Real dt)
 	this->mDelta = dt;
 }
 
+bool InputHandler::ControlQuit()
+{
+	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE) && mTimeUntilNextToggle < 0)
+	{
+		mTimeUntilNextToggle = 0.5f;
+		Ogre::LogManager::getSingletonPtr()->logMessage("escape button down");
+		return false;
+	}
+
+	return true;
+}
+
 bool InputHandler::ControlCamera(Camera* camera)
 {
 	const float mousesensitivity = 1.0f;
@@ -58,59 +70,38 @@ bool InputHandler::ControlCamera(Camera* camera)
 	camera->Yaw(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.X.rel * 0.01f));
 	camera->Pitch(Ogre::Radian(-cameraRotateSpeed * mousesensitivity * ms.Y.rel * 0.01f));
 
-	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE) && mTimeUntilNextToggle < 0)
-	{
-		mTimeUntilNextToggle = 0.5f;
-		Ogre::LogManager::getSingletonPtr()->logMessage("escape button down");
-		return false;
-	}
-
-	if (mKeyboard->isKeyDown(OIS::KC_W))
+	if (mKeyboard->isKeyDown(OIS::KC_I))
 	{
 		cammove += camdir;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_S))
+	if (mKeyboard->isKeyDown(OIS::KC_K))
 	{
 		cammove -= camdir;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_A))
+	if (mKeyboard->isKeyDown(OIS::KC_J))
 	{
 		cammove -= camright;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_D))
+	if (mKeyboard->isKeyDown(OIS::KC_L))
 	{
 		cammove += camright;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_Q))
+	if (mKeyboard->isKeyDown(OIS::KC_U))
 	{
 		cammove += camup;
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_E))
+	if (mKeyboard->isKeyDown(OIS::KC_O))
 	{
 		cammove -= camup;
 	}
 
 	cammove.normalise();
 	camera->SetPosition(campos + cammove * cameraMoveSpeed);
-
-	
-
-	camright = camera->GetRight();
-
-	if (mKeyboard->isKeyDown(OIS::KC_PGUP))
-	{
-		camera->Rotate(camright, Ogre::Radian(cameraRotateSpeed * 0.02f));
-	}
-
-	if (mKeyboard->isKeyDown(OIS::KC_PGDOWN))
-	{
-		camera->Rotate(camright, Ogre::Radian(-cameraRotateSpeed * 0.02f));
-	}
 
 	return true;
 }
@@ -124,47 +115,67 @@ void InputHandler::ControlMeteor(Meteor* meteor)
 	}
 }
 
-void InputHandler::ControlTestBall(Camera* camera, TestBall* testBall)
+void InputHandler::ControlTestBalls(Camera* camera, TestBall* testBall1, TestBall* testBall2)
 {
-	auto& ms = mMouse->getMouseState();
-
-	if (ms.buttonDown(OIS::MB_Left) && mTimeUntilNextToggle < 0)
-	{
-		testBall->Create(camera->GetPosition(), camera->GetDirection());
-		mTimeUntilNextToggle = 0.5f;
-	}
-
 	auto upForce = camera->GetUp();
 	upForce.y = 0;
 	upForce.normalise();
-	upForce *= 40000;
+	upForce *= 60000;
 
 	auto rightForce = camera->GetRight();
 	rightForce.y = 0;
 	rightForce.normalise();
-	rightForce *= 40000;
+	rightForce *= 60000;
 
-	auto forceVector = Ogre::Vector3(0, 0, 0);
+	// -- ball 1 --
+
+	auto forceVector1 = Ogre::Vector3(0, 0, 0);
 
 	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
-		forceVector -= upForce;
+		forceVector1 -= upForce;
 	}
 
 	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
-		forceVector += upForce;
+		forceVector1 += upForce;
 	}
 
 	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
-		forceVector -= rightForce;
+		forceVector1 -= rightForce;
 	}
 
 	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
-		forceVector += rightForce;
+		forceVector1 += rightForce;
 	}
 
-	testBall->ApplyForce(forceVector);
+	testBall1->ApplyForce(forceVector1);
+
+	// -- ball 2 --
+
+	auto forceVector2 = Ogre::Vector3(0, 0, 0);
+
+	if (mKeyboard->isKeyDown(OIS::KC_A))
+	{
+		forceVector2 -= upForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_D))
+	{
+		forceVector2 += upForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_W))
+	{
+		forceVector2 -= rightForce;
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_S))
+	{
+		forceVector2 += rightForce;
+	}
+
+	testBall2->ApplyForce(forceVector2);
 }

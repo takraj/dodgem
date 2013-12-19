@@ -21,9 +21,10 @@ namespace Dodgem
 		~InputHandler(void);
 
 		void CaptureState(Ogre::Real dt);
+		bool ControlQuit();
 		bool ControlCamera(Camera* camera);
 		void ControlMeteor(Meteor* meteor);
-		void ControlTestBall(Camera* camera, TestBall* testBall);
+		void ControlTestBalls(Camera* camera, TestBall* testBall1, TestBall* testBall2);
 	};
 
 }

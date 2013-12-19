@@ -3,8 +3,10 @@
 
 using namespace Dodgem;
 
-PhysicsHandler::PhysicsHandler(void)
+PhysicsHandler::PhysicsHandler(PhysicsTickCallback* tickCallback = NULL)
 {
+	this->tcb = tickCallback;
+
 	collisionConfig = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	pairCache = new btDbvtBroadphase();
@@ -12,6 +14,7 @@ PhysicsHandler::PhysicsHandler(void)
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, pairCache, solver, collisionConfig);
 	dynamicsWorld->setGravity(btVector3(0 , -981 ,0));
+	dynamicsWorld->setInternalTickCallback(&PhysicsHandler::TickCallback, static_cast<void *>(this));
 
 	this->debugger = NULL;
 }
@@ -28,7 +31,7 @@ PhysicsHandler::~PhysicsHandler(void)
 
 void PhysicsHandler::StepSimulation(Ogre::Real dt)
 {
-	this->dynamicsWorld->stepSimulation(btScalar(dt), 100);
+	this->dynamicsWorld->stepSimulation(btScalar(dt), 10);
 
 	if (this->debugger != NULL)
 	{
@@ -62,4 +65,32 @@ OgreDebugDrawer* PhysicsHandler::Debug(Ogre::SceneManager* sm)
 	this->debugger->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 	dynamicsWorld->setDebugDrawer(debugger);
 	return this->debugger;
+}
+
+void PhysicsHandler::TickCallback(btDynamicsWorld *world, btScalar timeStep)
+{
+	PhysicsHandler* physics = static_cast<PhysicsHandler*>(world->getWorldUserInfo());
+	
+	if (physics->tcb == NULL) return;
+
+	physics->tcb->PhysicsTick();
+}
+
+bool PhysicsHandler::CheckCollision(btRigidBody* body1, btRigidBody* body2)
+{
+	int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
+	for (int i=0;i<numManifolds;i++)
+	{
+		btPersistentManifold* contactManifold =  dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
+		const btCollisionObject* objA = contactManifold->getBody0();
+		const btCollisionObject* objB = contactManifold->getBody1();
+		const int numContacts = contactManifold->getNumContacts();
+		
+		if ((objA == body1) && (objB == body2) && (numContacts > 0))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

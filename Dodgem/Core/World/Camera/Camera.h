@@ -15,6 +15,8 @@ namespace Dodgem
 		void SetPosition(Ogre::Vector3 pos);
 		void SetLookAt(Ogre::Vector3 pos);
 
+		void AnimateToPosition(Ogre::Vector3 pos, Ogre::Real dt);
+
 		void Yaw(Ogre::Radian amount);
 		void Pitch(Ogre::Radian amount);
 		void Rotate(Ogre::Vector3 axis, Ogre::Radian amount);

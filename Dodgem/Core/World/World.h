@@ -11,20 +11,27 @@
 namespace Dodgem
 {
 
-	class World
+	class World : public PhysicsTickCallback
 	{
 	private:
 		Dodgem::Arena* arena;
 		Dodgem::Camera* camera;
 		Dodgem::Meteor* meteor;
-		Dodgem::TestBall* testBall;
+		Dodgem::TestBall* testBall1, *testBall2;
 		Dodgem::InputHandler* ih;
 		Dodgem::PhysicsHandler* physics;
+
+		void PhysicsTick();
 
 		Ogre::Light* light;
 
 		Ogre::RenderWindow* window;
 		Ogre::SceneManager* sm;
+
+		double lastDelta;
+		double timeLeftToNextMeteor;
+		double timeLeftToNextSecond;
+		int timeLeftToEndgame;
 	public:
 		World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager, Dodgem::InputHandler* inputHandler);
 		~World(void);

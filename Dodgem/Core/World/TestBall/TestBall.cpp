@@ -5,18 +5,20 @@ using namespace Dodgem;
 
 TestBall::TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHandler)
 {
+	static int id = 0;
+
 	this->sm = sceneManager;
 	this->node = sm->getRootSceneNode()->createChildSceneNode();
 	this->physics = physicsHandler;
 
-	auto sphere = sm->createEntity("testball", Ogre::SceneManager::PT_SPHERE);
+	auto sphere = sm->createEntity("testball"+Ogre::StringConverter::toString(id++), Ogre::SceneManager::PT_SPHERE);
 	sphere->setMaterialName("BaseWhiteNoLighting");
 
 	this->node->attachObject(sphere);
-	this->node->setScale(1, 1, 1);
+	this->node->setScale(2, 2, 2);
 	this->node->setVisible(false);
 
-	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius()));
+	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius() * 2));
 
 	this->mass = btScalar(1);
 	this->inertia = btVector3(0, 0, 0);
@@ -29,6 +31,16 @@ TestBall::TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* phy
 TestBall::~TestBall(void)
 {
 	// ??
+}
+
+bool TestBall::IsAlive()
+{
+	return this->created;
+}
+
+btRigidBody* TestBall::GetRigidBody()
+{
+	return this->ballRigidBody;
 }
 
 void TestBall::Kill()
@@ -45,7 +57,7 @@ void TestBall::Kill()
 }
 
 
-void TestBall::Create(Ogre::Vector3 position, Ogre::Vector3 direction)
+void TestBall::Create(Ogre::Vector3 position)
 {
 	if (this->created)
 	{
@@ -59,8 +71,7 @@ void TestBall::Create(Ogre::Vector3 position, Ogre::Vector3 direction)
 	this->ballRigidBody->setDamping(0.2, 0);
 	this->ballRigidBody->setRestitution(1.6);
 	this->ballRigidBody->setFriction(1000);
-	this->ballRigidBody->applyGravity(),
-	this->ballRigidBody->applyCentralImpulse(physics->AsBulletVector(direction * Ogre::Real(1000)));
+	this->ballRigidBody->applyGravity();
 
 	this->physics->AddRigidBody(this->ballRigidBody);
 	this->node->setVisible(false);
@@ -92,4 +103,12 @@ void TestBall::ApplyForce(Ogre::Vector3 f)
 
 	this->ballRigidBody->activate(true);
 	this->ballRigidBody->applyTorque(this->physics->AsBulletVector(f));
+}
+
+void TestBall::ApplyImpulse(Ogre::Vector3 f)
+{
+	if (!this->created) return;
+
+	this->ballRigidBody->activate(true);
+	this->ballRigidBody->applyCentralImpulse(this->physics->AsBulletVector(f));
 }
