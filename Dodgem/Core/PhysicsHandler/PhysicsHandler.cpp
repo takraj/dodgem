@@ -35,7 +35,7 @@ void PhysicsHandler::StepSimulation(Ogre::Real dt)
 
 	if (this->debugger != NULL)
 	{
-		this->dynamicsWorld->debugDrawWorld();
+		//this->dynamicsWorld->debugDrawWorld();
 	}
 }
 

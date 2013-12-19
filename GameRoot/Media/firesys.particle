@@ -1,0 +1,31 @@
+particle_system FireSystem
+{
+    material Fire
+    particle_width 5
+    particle_height 5
+    quota 100000
+    billboard_type point
+
+    emitter Point
+    {
+		angle 360
+		emission_rate 1000
+		time_to_live 1
+        velocity_min 30
+        velocity_max 100
+        colour_range_start 1 0.2 0 0
+		colour_range_end 1 0.8 0 0
+    }
+
+    affector Scaler
+    {
+		rate 50
+    }
+
+    affector ColourFader2
+    {
+    	state_change 0.5
+		alpha1 1
+		alpha2 -1
+    }
+}

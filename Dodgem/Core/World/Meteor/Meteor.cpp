@@ -10,13 +10,26 @@ Meteor::Meteor(Ogre::SceneManager* sceneManager, Dodgem::Arena* dodgemArena)
 
 	node = sm->getRootSceneNode()->createChildSceneNode();
 
-	auto sphere = sm->createEntity("meteor", Ogre::SceneManager::PT_SPHERE);
-	sphere->setMaterialName("BaseWhiteNoLighting");
+	auto sphere = sm->createEntity("meteor", "striped_ball.mesh");
 
 	node->attachObject(sphere);
-	node->setScale(2, 2, 2);
+	node->setScale(100, 100, 100);
 	node->setVisible(false);
 	this->active = false;
+
+	light = sceneManager->createLight("meteor_light");
+	light->setType(Ogre::Light::LT_POINT);
+	light->setAttenuation(1000000, 1, 0, 0);
+	light->setPowerScale(10000000);
+	light->setCastShadows(true);
+	light->setPosition(node->getPosition());
+	light->setVisible(false);
+
+	fireNode = node->createChildSceneNode();
+	smokeNode = node->createChildSceneNode();
+
+	psysFire = sm->createParticleSystem("psysFire", "FireSystem");
+	psysSmoke = sm->createParticleSystem("psysSmoke", "SmokeSystem");
 }
 
 
@@ -27,6 +40,12 @@ Meteor::~Meteor(void)
 
 void Meteor::Create()
 {
+	if (this->active)
+	{
+		fireNode->detachObject(psysFire);
+		//smokeNode->detachObject(psysSmoke);
+	}
+
 	auto arenaSize = this->arena->GetBounds();
 
 	std::random_device rd;
@@ -49,6 +68,12 @@ void Meteor::Create()
 	this->timeElapsedSinceCreation = 0.0;
 
 	this->effectDispatched = false;
+
+	light->setVisible(true);
+	light->setPosition(node->getPosition() + ((targetPoint - birthPoint).normalise() * 150));
+
+	fireNode->attachObject(psysFire);
+	//smokeNode->attachObject(psysSmoke);
 }
 
 void Meteor::StepAnimation(Ogre::Real dt)
@@ -62,14 +87,24 @@ void Meteor::StepAnimation(Ogre::Real dt)
 	this->timeElapsedSinceCreation += dt;
 	this->node->setPosition(this->birthPoint + (direction * (this->timeElapsedSinceCreation / impact_time)));
 
+	light->setPosition(node->getPosition() + ((targetPoint - birthPoint).normalise() * 150));
+
 	if (!this->impacted && (this->node->getPosition().y < 100))
 	{
+		light->setVisible(false);
 		this->impacted = true;
 		this->arena->Impact(this->node->getPosition(), 100.0f);
 	}
 
 	if (this->timeElapsedSinceCreation > total_lifetime)
 	{
+		if (this->active)
+		{
+			fireNode->detachObject(psysFire);
+			//smokeNode->detachObject(psysSmoke);
+		}
+
+		light->setVisible(false);
 		this->active = false;
 		this->node->setVisible(false);
 	}

@@ -34,7 +34,7 @@ void Arena::CreateArena()
 
 	arenaObject = sm->createManualObject("ARENA");
 	arenaObject->setDynamic(true);
-	arenaObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_LIST);
+	arenaObject->begin("Ground", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	this->UpdateArena();
 	arenaObject->end();
 	
@@ -44,7 +44,7 @@ void Arena::CreateArena()
 	arenaNode->attachObject(arenaObject);
 	arenaNode->setPosition(0, 0, 0);
 	arenaNode->setScale(1, 1, 1);
-	arenaNode->setVisible(false);
+	arenaNode->setVisible(true);
 }
 
 void Arena::UpdateArena()
@@ -69,11 +69,14 @@ void Arena::UpdateArena()
 		for (auto tri : representingTriangles)
 		{
 			arenaObject->position(tri->v3);
+			arenaObject->normal(Ogre::Vector3::UNIT_Y);
+			arenaObject->textureCoord(tri->v3.x * 0.001, tri->v3.z * 0.001);
 			arenaObject->position(tri->v2);
-			arenaObject->position(tri->v2);
+			arenaObject->normal(Ogre::Vector3::UNIT_Y);
+			arenaObject->textureCoord(tri->v2.x * 0.001, tri->v2.z * 0.001);
 			arenaObject->position(tri->v1);
-			arenaObject->position(tri->v1);
-			arenaObject->position(tri->v3);
+			arenaObject->normal(Ogre::Vector3::UNIT_Y);
+			arenaObject->textureCoord(tri->v1.x * 0.001, tri->v1.z * 0.001);
 
 			auto vertex1 = physics->AsBulletVector(tri->v1);
 			auto vertex2 = physics->AsBulletVector(tri->v2);

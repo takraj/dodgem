@@ -16,9 +16,15 @@ namespace Dodgem
 		Ogre::Real timeElapsedSinceCreation;
 		Ogre::Vector3 birthPoint;
 		Ogre::Vector3 targetPoint;
+		Ogre::Light* light;
 
 		Ogre::SceneManager* sm;
 		Ogre::SceneNode* node;
+		Ogre::SceneNode* fireNode;
+		Ogre::SceneNode* smokeNode;
+		Ogre::ParticleSystem* psysFire;
+		Ogre::ParticleSystem* psysSmoke;
+
 		Dodgem::Arena* arena;
 	public:
 		Meteor(Ogre::SceneManager* sceneManager, Dodgem::Arena* dodgemArena);

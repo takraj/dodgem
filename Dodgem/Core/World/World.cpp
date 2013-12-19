@@ -8,6 +8,7 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	this->sm = sceneManager;
 	this->window = renderWindow;
 	this->ih = inputHandler;
+	this->sm->setSkyBox(true, "Sky", 1000, true);	
 
 	this->physics = new Dodgem::PhysicsHandler(this);
 
@@ -15,10 +16,10 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 	sceneManager->setShadowColour(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
-	light = sceneManager->createLight("pointlight1");
+	light = sceneManager->createLight("dirlight");
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
-	light->setAttenuation(1000, 1, 0, 0);
-	light->setPowerScale(1);
+	light->setAttenuation(100, 1, 0, 0);
+	light->setPowerScale(10000);
 	light->setCastShadows(true);
 	light->setDirection(-1, -1, -1);
 
@@ -149,7 +150,7 @@ bool World::StepSimulation(Ogre::Real dt)
 		this->camera->SetLookAt(midpoint);
 
 		auto distance = this->testBall1->GetPosition().distance(this->testBall2->GetPosition());
-		auto heaven = midpoint + Ogre::Vector3(0, 0, -800);
+		auto heaven = midpoint + Ogre::Vector3(0, 0, 800);
 		heaven.y = std::max<double>(distance * 2, 5000);
 
 		this->camera->AnimateToPosition(heaven, dt);

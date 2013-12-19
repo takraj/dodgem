@@ -1,0 +1,20 @@
+#import Phong from "phong.material"
+
+material StrippedBall
+{
+	lighting on
+	technique main
+	{
+		pass main
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 1 1 1 25.6
+			emissive 0 0 0
+			texture_unit color
+			{
+				texture striped_ball.jpg
+			}
+		}
+	}
+}

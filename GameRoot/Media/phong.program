@@ -1,0 +1,13 @@
+vertex_program PhongShadingVS cg
+{
+  source phong.hlsl
+  entry_point vs
+  profiles vs_2_0 arbvp1
+}
+
+fragment_program PhongShadingPS cg
+{
+  source phong.hlsl
+  entry_point ps
+  profiles ps_2_0 arbfp1
+}

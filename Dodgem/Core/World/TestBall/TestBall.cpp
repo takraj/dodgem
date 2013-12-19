@@ -11,14 +11,13 @@ TestBall::TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* phy
 	this->node = sm->getRootSceneNode()->createChildSceneNode();
 	this->physics = physicsHandler;
 
-	auto sphere = sm->createEntity("testball"+Ogre::StringConverter::toString(id++), Ogre::SceneManager::PT_SPHERE);
-	sphere->setMaterialName("BaseWhiteNoLighting");
+	auto sphere = sm->createEntity("testball"+Ogre::StringConverter::toString(id++), "striped_ball.mesh");
 
 	this->node->attachObject(sphere);
-	this->node->setScale(2, 2, 2);
+	this->node->setScale(100, 100, 100);
 	this->node->setVisible(false);
 
-	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius() * 2));
+	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius() * 50));
 
 	this->mass = btScalar(1);
 	this->inertia = btVector3(0, 0, 0);
@@ -74,7 +73,7 @@ void TestBall::Create(Ogre::Vector3 position)
 	this->ballRigidBody->applyGravity();
 
 	this->physics->AddRigidBody(this->ballRigidBody);
-	this->node->setVisible(false);
+	this->node->setVisible(true);
 	this->created = true;
 }
 

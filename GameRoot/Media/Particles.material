@@ -1,0 +1,34 @@
+material Smoke
+{
+	technique
+	{
+		pass
+		{
+			scene_blend src_alpha one
+			lighting off
+			depth_write off
+			texture_unit
+			{
+				texture smokealpha.tga
+			}
+		}
+	}
+}
+
+material Fire
+{ 
+   technique 
+   { 
+		pass 
+      	{ 
+			lighting off			
+			scene_blend src_alpha one
+			depth_write off
+			
+			texture_unit
+			{
+				texture noiseGrad.tga
+			}
+       	}
+    }
+}

@@ -1,0 +1,21 @@
+#import Phong from "phong.material"
+
+material Ground
+{
+	receive_shadows on
+	lighting on
+	technique main
+	{
+		pass main
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 1 1 1 1
+			emissive 0 0 0 1
+			texture_unit color
+			{
+				texture ground.jpg				
+			}
+		}
+	}
+}
