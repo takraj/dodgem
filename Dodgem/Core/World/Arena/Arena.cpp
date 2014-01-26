@@ -70,13 +70,13 @@ void Arena::UpdateArena()
 		{
 			arenaObject->position(tri->v3);
 			arenaObject->normal(Ogre::Vector3::UNIT_Y);
-			arenaObject->textureCoord(tri->v3.x * 0.001, tri->v3.z * 0.001);
+			arenaObject->textureCoord(tri->v3.x * (0.001 / WORLD_SCALE), tri->v3.z * (0.001 / WORLD_SCALE));
 			arenaObject->position(tri->v2);
 			arenaObject->normal(Ogre::Vector3::UNIT_Y);
-			arenaObject->textureCoord(tri->v2.x * 0.001, tri->v2.z * 0.001);
+			arenaObject->textureCoord(tri->v2.x * (0.001 / WORLD_SCALE), tri->v2.z * (0.001 / WORLD_SCALE));
 			arenaObject->position(tri->v1);
 			arenaObject->normal(Ogre::Vector3::UNIT_Y);
-			arenaObject->textureCoord(tri->v1.x * 0.001, tri->v1.z * 0.001);
+			arenaObject->textureCoord(tri->v1.x * (0.001 / WORLD_SCALE), tri->v1.z * (0.001 / WORLD_SCALE));
 
 			auto vertex1 = physics->AsBulletVector(tri->v1);
 			auto vertex2 = physics->AsBulletVector(tri->v2);

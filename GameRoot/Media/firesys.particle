@@ -1,31 +1,39 @@
 particle_system FireSystem
 {
     material Fire
-    particle_width 5
-    particle_height 5
-    quota 100000
+    particle_width 0.005
+    particle_height 0.005
+    quota 10000
     billboard_type point
 
     emitter Point
     {
 		angle 360
-		emission_rate 1000
+		emission_rate 100
 		time_to_live 1
-        velocity_min 30
-        velocity_max 100
+        velocity_min 0.003
+        velocity_max 0.1
         colour_range_start 1 0.2 0 0
-		colour_range_end 1 0.8 0 0
+		colour_range_end 1 0.8 0 0.5
     }
 
     affector Scaler
     {
-		rate 50
+		rate 4
     }
 
     affector ColourFader2
     {
     	state_change 0.5
-		alpha1 1
-		alpha2 -1
+		alpha1 +1.0
+		alpha2 -1.0
+    }
+	
+	affector Rotator
+    {
+        rotation_range_start 0
+        rotation_range_end 360
+        rotation_speed_range_start -5
+        rotation_speed_range_end 5
     }
 }

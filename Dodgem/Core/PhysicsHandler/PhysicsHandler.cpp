@@ -13,7 +13,7 @@ PhysicsHandler::PhysicsHandler(PhysicsTickCallback* tickCallback = NULL)
 	solver = new btSequentialImpulseConstraintSolver();
 
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, pairCache, solver, collisionConfig);
-	dynamicsWorld->setGravity(btVector3(0 , -981 ,0));
+	dynamicsWorld->setGravity(btVector3(0 , -981 * WORLD_SCALE, 0));
 	dynamicsWorld->setInternalTickCallback(&PhysicsHandler::TickCallback, static_cast<void *>(this));
 
 	this->debugger = NULL;
@@ -35,7 +35,7 @@ void PhysicsHandler::StepSimulation(Ogre::Real dt)
 
 	if (this->debugger != NULL)
 	{
-		//this->dynamicsWorld->debugDrawWorld();
+		this->dynamicsWorld->debugDrawWorld();
 	}
 }
 
