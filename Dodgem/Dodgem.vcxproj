@@ -104,6 +104,7 @@
     <ClInclude Include="Core\World\Meteor\Meteor.h" />
     <ClInclude Include="Core\PhysicsHandler\PhysicsHandler.h" />
     <ClInclude Include="BulletUtility\DebugDrawer.h" />
+    <ClInclude Include="Core\World\Skate\Skate.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Core\World\TestBall\TestBall.h" />
   </ItemGroup>
@@ -119,6 +120,7 @@
     <ClCompile Include="Core\InputHandler\InputHandler.cpp" />
     <ClCompile Include="Core\World\Meteor\Meteor.cpp" />
     <ClCompile Include="Core\PhysicsHandler\PhysicsHandler.cpp" />
+    <ClCompile Include="Core\World\Skate\Skate.cpp" />
     <ClCompile Include="stdafx.cpp">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ForcedIncludeFiles>

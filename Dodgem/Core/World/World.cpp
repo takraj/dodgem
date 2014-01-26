@@ -37,10 +37,10 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	std::mt19937 e2(rd());
 	std::uniform_real_distribution<> dist(0, 1);
 
-	auto pos1 = Ogre::Vector3(0, 300, 0) * WORLD_SCALE;
-	auto pos2 = Ogre::Vector3(0, 300, 0) * WORLD_SCALE;
+	auto pos1 = Ogre::Vector3(0, 3, 0);
+	auto pos2 = Ogre::Vector3(0, 3, 0);
 
-	while (pos1.squaredDistance(pos2) < (500 * 500 * WORLD_SCALE * WORLD_SCALE))
+	while (pos1.squaredDistance(pos2) < (5 * 5))
 	{
 		pos1.x = ballPosMaximum.x * dist(e2) + ballPosMargin.x;
 		pos1.z = ballPosMaximum.z * dist(e2) + ballPosMargin.z;
@@ -116,8 +116,8 @@ bool World::StepSimulation(Ogre::Real dt)
 		auto ball1PointVector = this->testBall1->GetPosition() - meteorPos;
 		auto ball2PointVector = this->testBall2->GetPosition() - meteorPos;
 
-		this->testBall1->ApplyImpulse((ball1PointVector.normalisedCopy() * 500000000 * WORLD_SCALE * WORLD_SCALE) / ball1PointVector.squaredLength());
-		this->testBall2->ApplyImpulse((ball2PointVector.normalisedCopy() * 500000000 * WORLD_SCALE * WORLD_SCALE) / ball2PointVector.squaredLength());
+		this->testBall1->ApplyImpulse((ball1PointVector.normalisedCopy() * 50000) / ball1PointVector.squaredLength());
+		this->testBall2->ApplyImpulse((ball2PointVector.normalisedCopy() * 50000) / ball2PointVector.squaredLength());
 		this->meteor->SetEffectDispatched(true);
 	}
 
@@ -128,12 +128,12 @@ bool World::StepSimulation(Ogre::Real dt)
 	this->testBall1->Update();
 	this->testBall2->Update();
 
-	if (this->testBall1->GetPosition().y < -5000 * WORLD_SCALE)
+	if (this->testBall1->GetPosition().y < -50)
 	{
 		this->testBall1->Kill();
 	}
 
-	if (this->testBall2->GetPosition().y < -5000 * WORLD_SCALE)
+	if (this->testBall2->GetPosition().y < -50)
 	{
 		this->testBall2->Kill();
 	}
@@ -150,8 +150,8 @@ bool World::StepSimulation(Ogre::Real dt)
 		this->camera->SetLookAt(midpoint);
 
 		auto distance = this->testBall1->GetPosition().distance(this->testBall2->GetPosition());
-		auto heaven = midpoint + (Ogre::Vector3(0, 0, 800) * WORLD_SCALE);
-		heaven.y = std::max<double>(distance * 2, 5000 * WORLD_SCALE);
+		auto heaven = midpoint + Ogre::Vector3(0, 0, 8);
+		heaven.y = std::max<double>(distance * 2, 50);
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}
@@ -160,7 +160,7 @@ bool World::StepSimulation(Ogre::Real dt)
 		this->camera->SetLookAt(this->testBall1->GetPosition());
 		
 		auto heaven = this->testBall1->GetPosition();
-		heaven.y = 2500 * WORLD_SCALE;
+		heaven.y = 25;
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}
@@ -169,7 +169,7 @@ bool World::StepSimulation(Ogre::Real dt)
 		this->camera->SetLookAt(this->testBall2->GetPosition());
 		
 		auto heaven = this->testBall2->GetPosition();
-		heaven.y = 2500 * WORLD_SCALE;
+		heaven.y = 25;
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}

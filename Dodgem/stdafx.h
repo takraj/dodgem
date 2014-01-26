@@ -13,5 +13,3 @@
 #include <AL\alut.h>
 
 #include <btBulletDynamicsCommon.h>
-
-#define WORLD_SCALE 0.01f

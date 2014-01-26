@@ -14,12 +14,12 @@ TestBall::TestBall(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* phy
 	auto sphere = sm->createEntity("testball"+Ogre::StringConverter::toString(id++), "striped_ball.mesh");
 
 	this->node->attachObject(sphere);
-	this->node->setScale(100 * WORLD_SCALE, 100 * WORLD_SCALE, 100 * WORLD_SCALE);
+	this->node->setScale(1, 1, 1);
 	this->node->setVisible(false);
 
-	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius() * 50 * WORLD_SCALE));
+	this->ballShape = new btSphereShape(btScalar(sphere->getBoundingRadius() * 0.5));
 
-	this->mass = btScalar(1 / WORLD_SCALE);
+	this->mass = btScalar(100);
 	this->inertia = btVector3(0, 0, 0);
 	this->ballShape->calculateLocalInertia(mass, inertia);
 
@@ -69,7 +69,7 @@ void TestBall::Create(Ogre::Vector3 position)
 	this->ballRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(this->mass, this->ballMotionState, this->ballShape, this->inertia));
 	this->ballRigidBody->setDamping(0.2, 0);
 	this->ballRigidBody->setRestitution(1.6);
-	this->ballRigidBody->setFriction(1000 * WORLD_SCALE);
+	this->ballRigidBody->setFriction(10);
 	this->ballRigidBody->applyGravity();
 
 	this->physics->AddRigidBody(this->ballRigidBody);

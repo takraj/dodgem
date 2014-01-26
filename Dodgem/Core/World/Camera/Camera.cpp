@@ -6,12 +6,12 @@ using namespace Dodgem;
 Camera::Camera(Ogre::SceneManager* sceneManager, Ogre::RenderWindow* window)
 {
 	camera = sceneManager->createCamera("MAIN_CAMERA");
-	camera->setFarClipDistance(100000 * WORLD_SCALE);
+	camera->setFarClipDistance(1000);
 	camera->setNearClipDistance(0.1f);
 	window->addViewport(camera);
 
-	this->SetPosition(Ogre::Vector3(3000, 2000, 5000) * WORLD_SCALE);
-	this->SetLookAt(Ogre::Vector3(3000, 0, 1500) * WORLD_SCALE);
+	this->SetPosition(Ogre::Vector3(30, 20, 50));
+	this->SetLookAt(Ogre::Vector3(30, 0, 15));
 }
 
 void Camera::SetPosition(Ogre::Vector3 pos)

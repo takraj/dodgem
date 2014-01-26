@@ -54,6 +54,9 @@
     <ClCompile Include="BulletUtility\DebugDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\World\Skate\Skate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\WindowListener\WindowListener.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BulletUtility\DebugDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\World\Skate\Skate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

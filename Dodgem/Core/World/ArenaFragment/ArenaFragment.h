@@ -5,8 +5,8 @@
 
 namespace Dodgem
 {
-	const double ARENA_FRAGMENT_W = 200.0 * WORLD_SCALE;
-	const double ARENA_FRAGMENT_H = 200.0 * WORLD_SCALE;
+	const double ARENA_FRAGMENT_W = 2.0;
+	const double ARENA_FRAGMENT_H = 2.0;
 
 	struct ArenaTriangle
 	{

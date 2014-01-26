@@ -56,7 +56,7 @@ bool InputHandler::ControlQuit()
 bool InputHandler::ControlCamera(Camera* camera)
 {
 	const float mousesensitivity = 1.0f;
-	const float cameraMoveSpeed = 1000.0f * this->mDelta * WORLD_SCALE;
+	const float cameraMoveSpeed = 10.0f * this->mDelta;
 	const float cameraRotateSpeed = 50.0f * this->mDelta;
 
 	auto campos = camera->GetPosition();
@@ -120,12 +120,12 @@ void InputHandler::ControlTestBalls(Camera* camera, TestBall* testBall1, TestBal
 	auto upForce = camera->GetUp();
 	upForce.y = 0;
 	upForce.normalise();
-	upForce *= 60000 * WORLD_SCALE;
+	upForce *= 600;
 
 	auto rightForce = camera->GetRight();
 	rightForce.y = 0;
 	rightForce.normalise();
-	rightForce *= 60000 * WORLD_SCALE;
+	rightForce *= 600;
 
 	// -- ball 1 --
 
