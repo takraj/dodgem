@@ -12,7 +12,7 @@ material Sky
 			depth_check off
 			texture_unit
 			{
-				cubic_texture stormydays.tga separateUV
+				cubic_texture stormydays.jpg separateUV
 				tex_address_mode clamp
 			}
 		}
