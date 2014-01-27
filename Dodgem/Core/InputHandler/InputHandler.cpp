@@ -184,44 +184,44 @@ void InputHandler::ControlSkates(Skate* skate1, Skate* skate2)
 {
 	// -- ball 1 --
 
-	if (mKeyboard->isKeyDown(OIS::KC_I))
+	if (mKeyboard->isKeyDown(OIS::KC_W))
 	{
 		skate1->ApplyForce(Ogre::Vector3(0, 0, 1000));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_K))
+	if (mKeyboard->isKeyDown(OIS::KC_S))
 	{
 		skate1->ApplyForce(Ogre::Vector3(0, 0, -1000));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_J))
+	if (mKeyboard->isKeyDown(OIS::KC_A))
 	{
 		skate1->Steer(Ogre::Vector3(150, 0, 0));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_L))
+	if (mKeyboard->isKeyDown(OIS::KC_D))
 	{
 		skate1->Steer(Ogre::Vector3(-150, 0, 0));
 	}
 
 	// -- ball 2 --
 
-	if (mKeyboard->isKeyDown(OIS::KC_T))
+	if (mKeyboard->isKeyDown(OIS::KC_UP))
 	{
 		skate2->ApplyForce(Ogre::Vector3(0, 0, 1000));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_G))
+	if (mKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
 		skate2->ApplyForce(Ogre::Vector3(0, 0, -1000));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_F))
+	if (mKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
 		skate2->Steer(Ogre::Vector3(150, 0, 0));
 	}
 
-	if (mKeyboard->isKeyDown(OIS::KC_H))
+	if (mKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
 		skate2->Steer(Ogre::Vector3(-150, 0, 0));
 	}

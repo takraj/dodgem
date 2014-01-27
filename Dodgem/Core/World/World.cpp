@@ -26,8 +26,9 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	this->camera = new Camera(this->sm, this->window);
 	this->arena = new Arena(this->sm, this->physics, 30, 15);
 	this->meteor = new Meteor(this->sm, this->arena);
-	this->testBall1 = new TestBall(this->sm, this->physics);
-	this->testBall2 = new TestBall(this->sm, this->physics);
+
+	//this->testBall1 = new TestBall(this->sm, this->physics);
+	//this->testBall2 = new TestBall(this->sm, this->physics);
 
 	this->skate1 = new Skate(this->sm, this->physics);
 	this->skate2 = new Skate(this->sm, this->physics);
@@ -52,11 +53,11 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 		pos2.z = ballPosMaximum.z * dist(e2) + ballPosMargin.z;
 	}
 
-	this->testBall1->Create(pos1);
-	this->testBall2->Create(pos2);
+	//this->testBall1->Create(pos1);
+	//this->testBall2->Create(pos2);
 
-	this->skate1->Create(pos1 + 3);
-	this->skate1->Create(pos2 + 3);
+	this->skate1->Create(pos1);
+	this->skate2->Create(pos2);
 
 	lastDelta = 0;
 	timeLeftToEndgame = 60;
@@ -70,14 +71,14 @@ World::~World(void)
 	delete this->arena;
 	delete this->camera;
 	delete this->meteor;
-	delete this->testBall1;
-	delete this->testBall2;
+	delete this->skate1;
+	delete this->skate2;
 	delete this->physics;
 }
 
 void World::PhysicsTick()
 {
-	if (this->physics->CheckCollision(this->testBall1->GetRigidBody(), this->testBall2->GetRigidBody()))
+	if (this->physics->CheckCollision(this->skate1->GetRigidBody(), this->skate2->GetRigidBody()))
 	{
 		printf("!! COLLISION !!\n");
 		this->timeLeftToEndgame = 60;
@@ -119,34 +120,29 @@ bool World::StepSimulation(Ogre::Real dt)
 	auto meteorPos = this->meteor->GetPosition();
 	if (!this->meteor->IsEffectDispatched() && (meteorPos.y < 0))
 	{
-		auto ball1PointVector = this->testBall1->GetPosition() - meteorPos;
-		auto ball2PointVector = this->testBall2->GetPosition() - meteorPos;
+		auto skate1PointVector = this->skate1->GetPosition() - meteorPos;
+		auto skate2PointVector = this->skate2->GetPosition() - meteorPos;
 
-		this->testBall1->ApplyImpulse((ball1PointVector.normalisedCopy() * 50000) / ball1PointVector.squaredLength());
-		this->testBall2->ApplyImpulse((ball2PointVector.normalisedCopy() * 50000) / ball2PointVector.squaredLength());
+		this->skate1->ApplyImpulse((skate1PointVector.normalisedCopy() * 50000) / skate1PointVector.squaredLength());
+		this->skate2->ApplyImpulse((skate2PointVector.normalisedCopy() * 50000) / skate2PointVector.squaredLength());
 		this->meteor->SetEffectDispatched(true);
 	}
 
 	this->physics->StepSimulation(dt);
-
-	this->ih->ControlTestBalls(this->camera, this->testBall1, this->testBall2);
-
-	this->testBall1->Update();
-	this->testBall2->Update();
 
 	this->ih->ControlSkates(this->skate1, this->skate2);
 
 	this->skate1->Update();
 	this->skate2->Update();
 
-	if (this->testBall1->GetPosition().y < -50)
+	if (this->skate1->GetPosition().y < -50)
 	{
-		this->testBall1->Kill();
+		this->skate1->Kill();
 	}
 
-	if (this->testBall2->GetPosition().y < -50)
+	if (this->skate2->GetPosition().y < -50)
 	{
-		this->testBall2->Kill();
+		this->skate2->Kill();
 	}
 
 	if (!ih->ControlQuit())
@@ -154,32 +150,32 @@ bool World::StepSimulation(Ogre::Real dt)
 		return false;
 	}
 
-	if (this->testBall1->IsAlive() && this->testBall2->IsAlive())
+	if (this->skate1->IsAlive() && this->skate2->IsAlive())
 	{
-		auto midpoint = (this->testBall1->GetPosition() + this->testBall2->GetPosition()) * 0.5f;
+		auto midpoint = (this->skate1->GetPosition() + this->skate2->GetPosition()) * 0.5f;
 
 		this->camera->SetLookAt(midpoint);
 
-		auto distance = this->testBall1->GetPosition().distance(this->testBall2->GetPosition());
+		auto distance = this->skate1->GetPosition().distance(this->skate2->GetPosition());
 		auto heaven = midpoint + Ogre::Vector3(0, 0, 8);
 		heaven.y = std::max<double>(distance * 2, 50);
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}
-	else if (this->testBall1->IsAlive())
+	else if (this->skate1->IsAlive())
 	{
-		this->camera->SetLookAt(this->testBall1->GetPosition());
+		this->camera->SetLookAt(this->skate1->GetPosition());
 		
-		auto heaven = this->testBall1->GetPosition();
+		auto heaven = this->skate1->GetPosition();
 		heaven.y = 25;
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}
-	else if (this->testBall2->IsAlive())
+	else if (this->skate2->IsAlive())
 	{
-		this->camera->SetLookAt(this->testBall2->GetPosition());
+		this->camera->SetLookAt(this->skate2->GetPosition());
 		
-		auto heaven = this->testBall2->GetPosition();
+		auto heaven = this->skate2->GetPosition();
 		heaven.y = 25;
 
 		this->camera->AnimateToPosition(heaven, dt);

@@ -101,7 +101,7 @@ void Arena::UpdateArena()
 	{
 		arenaMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
 		arenaRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(0, arenaMotionState, arenaShape, btVector3(0, 0, 0)));
-		arenaRigidBody->setRestitution(btScalar(0.1));
+		arenaRigidBody->setRestitution(btScalar(0.000001));
 		arenaRigidBody->setFriction(1);
 	}
 

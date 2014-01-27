@@ -18,7 +18,7 @@ namespace Dodgem
 		Dodgem::Arena* arena;
 		Dodgem::Camera* camera;
 		Dodgem::Meteor* meteor;
-		Dodgem::TestBall* testBall1, *testBall2;
+		//Dodgem::TestBall* testBall1, *testBall2;
 		Dodgem::Skate* skate1, *skate2;
 		Dodgem::InputHandler* ih;
 		Dodgem::PhysicsHandler* physics;
