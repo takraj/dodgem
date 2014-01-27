@@ -3,6 +3,14 @@
 
 using namespace Dodgem;
 
+static bool CustomMaterialCombinerCallback(btManifoldPoint& cp,   const btCollisionObject* colObj0,int partId0,int index0,const btCollisionObject* colObj1,int partId1,int index1)
+{
+   btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1);
+   return true;
+}
+
+extern ContactAddedCallback gContactAddedCallback;
+
 PhysicsHandler::PhysicsHandler(PhysicsTickCallback* tickCallback = NULL)
 {
 	this->tcb = tickCallback;
@@ -17,6 +25,8 @@ PhysicsHandler::PhysicsHandler(PhysicsTickCallback* tickCallback = NULL)
 	dynamicsWorld->setInternalTickCallback(&PhysicsHandler::TickCallback, static_cast<void *>(this));
 
 	this->debugger = NULL;
+
+	gContactAddedCallback = CustomMaterialCombinerCallback;
 }
 
 

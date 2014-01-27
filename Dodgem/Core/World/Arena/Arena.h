@@ -2,6 +2,7 @@
 
 #include "..\ArenaFragment\ArenaFragment.h"
 #include "..\..\PhysicsHandler\PhysicsHandler.h"
+#include "BulletCollision\CollisionDispatch\btInternalEdgeUtility.h"
 
 namespace Dodgem
 {
@@ -17,7 +18,7 @@ namespace Dodgem
 		btMotionState* arenaMotionState;
 		btRigidBody* arenaRigidBody;
 		btTriangleMesh* arenaTriangleMesh;
-		btTriangleMeshShape* arenaShape;
+		btBvhTriangleMeshShape* arenaShape;
 
 		std::vector<Dodgem::ArenaFragment> fragments;
 

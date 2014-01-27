@@ -2,6 +2,7 @@
 
 #include "..\..\stdafx.h"
 #include "..\..\BulletUtility\DebugDrawer.h"
+#include "BulletCollision\CollisionDispatch\btInternalEdgeUtility.h"
 
 namespace Dodgem
 {

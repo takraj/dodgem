@@ -95,7 +95,7 @@ void Arena::UpdateArena()
 	}
 
 	arenaShape = new btBvhTriangleMeshShape(arenaTriangleMesh, true);
-	arenaShape->setMargin(0.4);
+	arenaShape->setMargin(0.04);
 
 	if (needToCreate)
 	{
@@ -104,6 +104,10 @@ void Arena::UpdateArena()
 		arenaRigidBody->setRestitution(btScalar(0.000001));
 		arenaRigidBody->setFriction(1);
 	}
+
+	arenaRigidBody->setCollisionFlags(arenaRigidBody->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
+	btTriangleInfoMap* triangleInfoMap = new btTriangleInfoMap();
+	btGenerateInternalEdgeInfo(arenaShape, triangleInfoMap);
 
 	arenaRigidBody->setCollisionShape(arenaShape);
 	physics->AddRigidBody(arenaRigidBody);
