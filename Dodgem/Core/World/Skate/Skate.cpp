@@ -11,15 +11,31 @@ Skate::Skate(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHa
 	this->node = sm->getRootSceneNode()->createChildSceneNode();
 	this->physics = physicsHandler;
 
-	auto skate = sm->createEntity("testball"+Ogre::StringConverter::toString(id++), "skate.mesh");
+	auto skate = sm->createEntity("skate"+Ogre::StringConverter::toString(id++), "skate.mesh");
 
-	this->node->attachObject(skate);
+	auto objectNode = this->node->createChildSceneNode();
+	objectNode->attachObject(skate);
+	objectNode->roll(Ogre::Radian(Ogre::Degree(-90).valueRadians()));
+
 	this->node->setScale(1, 1, 1);
 	this->node->setVisible(false);
 
-	const auto _AABB = skate->getBoundingBox();
+	objectNode->_update(true, true);
 
-	this->skateShape = new btBoxShape(physics->AsBulletVector(_AABB.getHalfSize()));
+	const auto _AABB = objectNode->_getWorldAABB();
+	const auto _HalfSize = _AABB.getHalfSize();
+	const auto _AlignedHalfSize = Ogre::Vector3(_HalfSize.x, _HalfSize.y, _HalfSize.z);
+
+	objectNode->setPosition(_HalfSize.x, _HalfSize.y * 1.3, _HalfSize.z * -1);
+
+	btTransform localTrans;
+	localTrans.setIdentity();
+	localTrans.setOrigin(btVector3(_HalfSize.x, 0, 0));
+
+	auto compoundShape = new btCompoundShape();
+	compoundShape->addChildShape(localTrans, new btBoxShape(physics->AsBulletVector(_AlignedHalfSize)));
+
+	this->skateShape = compoundShape;
 
 	this->mass = btScalar(100);
 	this->inertia = btVector3(0, 0, 0);

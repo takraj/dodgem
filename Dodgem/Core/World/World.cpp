@@ -29,6 +29,9 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	this->testBall1 = new TestBall(this->sm, this->physics);
 	this->testBall2 = new TestBall(this->sm, this->physics);
 
+	this->skate1 = new Skate(this->sm, this->physics);
+	this->skate2 = new Skate(this->sm, this->physics);
+
 	auto arenaBounds = this->arena->GetBounds();
 	auto ballPosMargin = arenaBounds * 0.1f;
 	auto ballPosMaximum = arenaBounds - (ballPosMargin * 2);
@@ -51,6 +54,9 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 
 	this->testBall1->Create(pos1);
 	this->testBall2->Create(pos2);
+
+	this->skate1->Create(pos1 + 3);
+	this->skate1->Create(pos2 + 3);
 
 	lastDelta = 0;
 	timeLeftToEndgame = 60;
@@ -106,7 +112,7 @@ bool World::StepSimulation(Ogre::Real dt)
 		this->meteor->Create();
 	}
 
-	ih->CaptureState(dt);
+	this->ih->CaptureState(dt);
 
 	this->meteor->StepAnimation(dt);
 
@@ -123,10 +129,13 @@ bool World::StepSimulation(Ogre::Real dt)
 
 	this->physics->StepSimulation(dt);
 
-	ih->ControlTestBalls(this->camera, this->testBall1, this->testBall2);
+	this->ih->ControlTestBalls(this->camera, this->testBall1, this->testBall2);
 
 	this->testBall1->Update();
 	this->testBall2->Update();
+
+	this->skate1->Update();
+	this->skate2->Update();
 
 	if (this->testBall1->GetPosition().y < -50)
 	{
