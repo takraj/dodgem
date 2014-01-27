@@ -158,7 +158,7 @@ bool World::StepSimulation(Ogre::Real dt)
 
 		auto distance = this->skate1->GetPosition().distance(this->skate2->GetPosition());
 		auto heaven = midpoint + Ogre::Vector3(0, 0, 8);
-		heaven.y = std::max<double>(distance * 2, 50);
+		heaven.y = std::max<double>(distance * 1.2, 20);
 
 		this->camera->AnimateToPosition(heaven, dt);
 	}
