@@ -179,3 +179,51 @@ void InputHandler::ControlTestBalls(Camera* camera, TestBall* testBall1, TestBal
 
 	testBall2->ApplyForce(forceVector2);
 }
+
+void InputHandler::ControlSkates(Skate* skate1, Skate* skate2)
+{
+	// -- ball 1 --
+
+	if (mKeyboard->isKeyDown(OIS::KC_I))
+	{
+		skate1->ApplyForce(Ogre::Vector3(0, 0, 1000));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_K))
+	{
+		skate1->ApplyForce(Ogre::Vector3(0, 0, -1000));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_J))
+	{
+		skate1->Steer(Ogre::Vector3(150, 0, 0));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_L))
+	{
+		skate1->Steer(Ogre::Vector3(-150, 0, 0));
+	}
+
+	// -- ball 2 --
+
+	if (mKeyboard->isKeyDown(OIS::KC_T))
+	{
+		skate2->ApplyForce(Ogre::Vector3(0, 0, 1000));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_G))
+	{
+		skate2->ApplyForce(Ogre::Vector3(0, 0, -1000));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_F))
+	{
+		skate2->Steer(Ogre::Vector3(150, 0, 0));
+	}
+
+	if (mKeyboard->isKeyDown(OIS::KC_H))
+	{
+		skate2->Steer(Ogre::Vector3(-150, 0, 0));
+	}
+	
+}

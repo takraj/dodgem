@@ -17,7 +17,7 @@ Skate::Skate(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHa
 	objectNode->attachObject(skate);
 	objectNode->roll(Ogre::Radian(Ogre::Degree(-90).valueRadians()));
 
-	this->node->setScale(1, 1, 1);
+	this->node->setScale(0.7, 0.7, 0.7);
 	this->node->setVisible(false);
 
 	objectNode->_update(true, true);
@@ -26,7 +26,7 @@ Skate::Skate(Ogre::SceneManager* sceneManager, Dodgem::PhysicsHandler* physicsHa
 	const auto _HalfSize = _AABB.getHalfSize();
 	const auto _AlignedHalfSize = Ogre::Vector3(_HalfSize.x, _HalfSize.y, _HalfSize.z);
 
-	objectNode->setPosition(_HalfSize.x, _HalfSize.y * 1.3, _HalfSize.z * -1);
+	objectNode->setPosition(_HalfSize.x, _HalfSize.y * 1.9, _HalfSize.z * -1.5);
 
 	btTransform localTrans;
 	localTrans.setIdentity();
@@ -116,10 +116,14 @@ Ogre::Vector3 Skate::GetPosition()
 
 void Skate::ApplyForce(Ogre::Vector3 f)
 {
-	if ((!this->created) || (this->node->getPosition().y <= 0)) return;
+	if ((!this->created) || (this->node->getPosition().y <= -5) || (this->node->getPosition().y >= 5)) return;
+
+	auto forceVector = this->node->_getDerivedOrientation() * f;
+	auto upVector = this->node->_getDerivedOrientation() * Ogre::Vector3::UNIT_X;
+	auto forceScale = std::max<double>(upVector.y - 0.6, 0) / 0.4;
 
 	this->skateRigidBody->activate(true);
-	this->skateRigidBody->applyTorque(this->physics->AsBulletVector(f));
+	this->skateRigidBody->applyCentralForce(this->physics->AsBulletVector(forceVector * forceScale));
 }
 
 void Skate::ApplyImpulse(Ogre::Vector3 f)
@@ -128,4 +132,20 @@ void Skate::ApplyImpulse(Ogre::Vector3 f)
 
 	this->skateRigidBody->activate(true);
 	this->skateRigidBody->applyCentralImpulse(this->physics->AsBulletVector(f));
+}
+
+void Skate::Steer(Ogre::Vector3 f)
+{
+	if ((!this->created) || (this->node->getPosition().y <= -5) || (this->node->getPosition().y >= 5)) return;
+
+	auto forceVector = this->node->_getDerivedOrientation() * f;
+	auto upVector = this->node->_getDerivedOrientation() * Ogre::Vector3::UNIT_X;
+	auto forceScale = std::max<double>(upVector.y - 0.6, 0) / 0.4;
+
+	this->skateRigidBody->activate(true);
+
+	auto speed = skateRigidBody->getLinearVelocity().length();
+
+	this->skateRigidBody->applyTorque(this->physics->AsBulletVector(forceVector * forceScale * speed));
+	//this->skateRigidBody->applyForce(this->physics->AsBulletVector(forceVector * forceScale * speed), btVector3(0, 0, -300));
 }

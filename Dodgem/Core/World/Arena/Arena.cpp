@@ -95,6 +95,7 @@ void Arena::UpdateArena()
 	}
 
 	arenaShape = new btBvhTriangleMeshShape(arenaTriangleMesh, true);
+	arenaShape->setMargin(0.4);
 
 	if (needToCreate)
 	{

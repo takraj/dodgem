@@ -30,6 +30,7 @@ namespace Dodgem
 		void Kill();
 		void ApplyForce(Ogre::Vector3 f);
 		void ApplyImpulse(Ogre::Vector3 f);
+		void Steer(Ogre::Vector3 f);
 		Ogre::Vector3 GetPosition();
 
 		bool IsAlive();

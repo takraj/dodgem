@@ -134,6 +134,8 @@ bool World::StepSimulation(Ogre::Real dt)
 	this->testBall1->Update();
 	this->testBall2->Update();
 
+	this->ih->ControlSkates(this->skate1, this->skate2);
+
 	this->skate1->Update();
 	this->skate2->Update();
 
