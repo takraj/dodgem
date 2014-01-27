@@ -86,8 +86,8 @@ void Skate::Create(Ogre::Vector3 position)
 	this->skateMotionState = new btDefaultMotionState(btTransform(this->quaternion, physics->AsBulletVector(position)));
 	this->skateRigidBody = new btRigidBody(btRigidBody::btRigidBodyConstructionInfo(this->mass, this->skateMotionState, this->skateShape, this->inertia));
 	this->skateRigidBody->setDamping(0.2, 0);
-	this->skateRigidBody->setRestitution(1.6);
-	this->skateRigidBody->setFriction(10);
+	this->skateRigidBody->setRestitution(0.6);
+	this->skateRigidBody->setAnisotropicFriction(btVector3(5, 10, 0.1));
 	this->skateRigidBody->applyGravity();
 
 	this->physics->AddRigidBody(this->skateRigidBody);
