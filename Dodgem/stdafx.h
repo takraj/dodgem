@@ -7,6 +7,9 @@
 #include <tchar.h>
 
 #include <OGRE\Ogre.h>
+#include <OGRE\Overlay\OgreOverlay.h>
+#include <OGRE\Overlay\OgreOverlayManager.h>
+#include <OGRE\Overlay\OgreOverlayElement.h>
 #include <OIS\OIS.h>
 
 #include <AL\al.h>

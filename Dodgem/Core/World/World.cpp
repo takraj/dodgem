@@ -30,6 +30,8 @@ World::World(Ogre::RenderWindow* renderWindow, Ogre::SceneManager* sceneManager,
 	this->skate1 = new Skate(this->sm, this->physics);
 	this->skate2 = new Skate(this->sm, this->physics);
 
+	this->hud = new HUD();
+
 	this->Init();
 	this->player1Score = 0;
 	this->player2Score = 0;
@@ -294,16 +296,19 @@ bool World::StepSimulation(Ogre::Real dt)
 
 	if (this->winner == 1)
 	{
+		this->hud->refreshScore(this->player1Score, this->player2Score);
 		printf("** Player 1 wins, scores %d:%d **\n", this->player1Score, this->player2Score);
 	}
 
 	if (this->winner == 2)
 	{
+		this->hud->refreshScore(this->player1Score, this->player2Score);
 		printf("** Player 2 wins, scores %d:%d **\n", this->player1Score, this->player2Score);
 	}
 
 	if (this->winner == 3)
 	{
+		this->hud->refreshScore(this->player1Score, this->player2Score);
 		printf("** DRAW, scores %d:%d **\n", this->player1Score, this->player2Score);
 	}
 

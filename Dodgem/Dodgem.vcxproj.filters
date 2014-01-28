@@ -60,6 +60,9 @@
     <ClCompile Include="Core\World\Box\Box.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\HUD\HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\WindowListener\WindowListener.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\World\Box\Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\HUD\HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

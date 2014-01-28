@@ -9,6 +9,7 @@
 #include "Box\Box.h"
 #include "..\InputHandler\InputHandler.h"
 #include "..\PhysicsHandler\PhysicsHandler.h"
+#include "..\HUD\HUD.h"
 
 namespace Dodgem
 {
@@ -24,6 +25,7 @@ namespace Dodgem
 		std::vector<Dodgem::Box*> boxes;
 		Dodgem::InputHandler* ih;
 		Dodgem::PhysicsHandler* physics;
+		Dodgem::HUD* hud;
 
 		void PhysicsTick();
 
