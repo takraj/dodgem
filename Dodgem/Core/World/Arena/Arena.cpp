@@ -114,6 +114,22 @@ Ogre::Vector3 Arena::GetBounds()
 	return arenaObject->getBoundingBox().getSize();
 }
 
+void Arena::ResetArena()
+{
+	for (auto& fragment : fragments)
+	{
+		auto tris = fragment.GetTriangles();
+		for (auto tri : tris)
+		{
+			tri->isDestroyed = false;
+		}
+	}
+
+	arenaObject->beginUpdate(0);
+	this->UpdateArena();
+	arenaObject->end();
+}
+
 void Arena::Impact(Ogre::Vector3 impactPoint, Ogre::Real impactRadius)
 {
 	const auto effect_radius = impactRadius * 1.5f;

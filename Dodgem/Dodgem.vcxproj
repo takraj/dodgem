@@ -94,6 +94,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\World\Box\Box.h" />
     <ClInclude Include="Core\World\Arena\Arena.h" />
     <ClInclude Include="Core\World\ArenaFragment\ArenaFragment.h" />
     <ClInclude Include="Core\World\Camera\Camera.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Core\World\TestBall\TestBall.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\World\Box\Box.cpp" />
     <ClCompile Include="Core\World\Arena\Arena.cpp" />
     <ClCompile Include="Core\World\ArenaFragment\ArenaFragment.cpp" />
     <ClCompile Include="Core\World\Camera\Camera.cpp" />

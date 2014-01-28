@@ -31,6 +31,7 @@ namespace Dodgem
 
 		Ogre::Vector3 GetBounds();
 		void Impact(Ogre::Vector3 impactPoint, Ogre::Real impactRadius);
+		void ResetArena();
 	};
 
 }

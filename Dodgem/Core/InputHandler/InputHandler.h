@@ -27,6 +27,8 @@ namespace Dodgem
 		void ControlMeteor(Meteor* meteor);
 		void ControlTestBalls(Camera* camera, TestBall* testBall1, TestBall* testBall2);
 		void ControlSkates(Skate* skate1, Skate* skate2);
+		bool ControlPause();
+		bool ControlRestart();
 	};
 
 }

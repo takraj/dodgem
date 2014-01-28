@@ -53,6 +53,30 @@ bool InputHandler::ControlQuit()
 	return true;
 }
 
+bool InputHandler::ControlRestart()
+{
+	if (mKeyboard->isKeyDown(OIS::KC_RETURN) && mTimeUntilNextToggle < 0)
+	{
+		mTimeUntilNextToggle = 0.5f;
+		Ogre::LogManager::getSingletonPtr()->logMessage("restart button down");
+		return false;
+	}
+
+	return true;
+}
+
+bool InputHandler::ControlPause()
+{
+	if (mKeyboard->isKeyDown(OIS::KC_SPACE) && mTimeUntilNextToggle < 0)
+	{
+		mTimeUntilNextToggle = 0.5f;
+		Ogre::LogManager::getSingletonPtr()->logMessage("pause button down");
+		return false;
+	}
+
+	return true;
+}
+
 bool InputHandler::ControlCamera(Camera* camera)
 {
 	const float mousesensitivity = 1.0f;
