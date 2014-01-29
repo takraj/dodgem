@@ -78,6 +78,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\GameDev\OgreSDK_vc11_v1-9-0\boost;C:\GameDev\openal-soft-1.15.1\include\AL;C:\GameDev\openal-soft-1.15.1\include;C:\GameDev\bullet-2.82-r2704\include;C:\GameDev\OgreSDK_vc11_v1-9-0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalOptions>-Zm512 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

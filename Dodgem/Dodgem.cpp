@@ -35,27 +35,26 @@ void loadResources()
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups(); 
 }
 
+Dodgem::World* world;
+Ogre::Root ogreRoot;
+Ogre::SceneManager* sceneManager;
+Ogre::RenderWindow* window;
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	Ogre::Root ogreRoot;
-
 	ogreRoot.restoreConfig();
 	ogreRoot.showConfigDialog();
 
-	auto window = ogreRoot.initialise(true, "Dodge'em Game");
+	window = ogreRoot.initialise(true, "Dodge'em Game");
 	loadResources();
-	auto sceneManager = ogreRoot.createSceneManager(Ogre::SceneType::ST_EXTERIOR_CLOSE, "WORLD");
+	sceneManager = ogreRoot.createSceneManager(Ogre::SceneType::ST_EXTERIOR_CLOSE, "WORLD");
 
-	auto inputHandler = new Dodgem::InputHandler(window);
-	auto world = new Dodgem::World(window, sceneManager, inputHandler);
+	world = new Dodgem::World(window, sceneManager, new Dodgem::InputHandler(window));
 	
 	ogreRoot.addFrameListener(world->GetDebugger());
 	ogreRoot.addFrameListener(new Dodgem::WindowListener(window));
 	ogreRoot.addFrameListener(new Dodgem::GameplayListener(world));
 	ogreRoot.startRendering();
-
-	delete world;
-	delete inputHandler;
 
 	return 0;
 }
